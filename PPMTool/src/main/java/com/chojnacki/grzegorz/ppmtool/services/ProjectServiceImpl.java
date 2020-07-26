@@ -2,6 +2,7 @@ package com.chojnacki.grzegorz.ppmtool.services;
 
 
 import com.chojnacki.grzegorz.ppmtool.domain.Project;
+import com.chojnacki.grzegorz.ppmtool.exceptions.ProjectIdException;
 import com.chojnacki.grzegorz.ppmtool.repositories.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,10 +16,15 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Project saveOrUpdate(Project project) {
-        //Logic
+       try {
+           project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
+           return projectRepository.save(project);
+       } catch (Exception e) {
+           throw new ProjectIdException("Project ID '"+project.getProjectIdentifier().toUpperCase()+"' already exists" );
+       }
 
 
 
-        return projectRepository.save(project);
+
     }
 }
