@@ -1,0 +1,37 @@
+img {
+  width: 100%;
+}
+
+.navbar {
+  background-color: #e3f2fd;
+}
+
+.list-group-item.delete:hover {
+ 
+  cursor: -webkit-grab;
+  background-color: pink;
+
+}
+.list-group-item.update:hover {
+  cursor: -webkit-grab;
+  background-color: gainsboro;
+}
+
+.list-group-item.board:hover {
+  cursor: -webkit-grab;
+  background-color: turquoise;
+}
+
+.fa.fa-minus-circle{
+
+  color:red;
+}
+
+.fa.fa-flag-checkered {
+  color: blue;
+  
+}
+
+.fa.fa-edit{
+  color:darkgoldenrod;
+}
