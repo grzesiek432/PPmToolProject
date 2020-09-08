@@ -13,7 +13,7 @@ public class ProjectTask {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(updatable = false)
+    @Column(updatable = false, unique = true)
     private String projectSequence;
     @NotBlank(message = "Please include a project summary")
     private String summary;
@@ -22,7 +22,7 @@ public class ProjectTask {
     private Integer priority;
     private Date dueDate;
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @Column( updatable = false)
+    @Column(updatable = false)
     private Date created_At;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date updated_At;
@@ -30,8 +30,8 @@ public class ProjectTask {
     private String projectIdentifier;
 
     //ManyToOne with Backlog
-    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.REFRESH)
-    @JoinColumn(name = "backlog_id",updatable = false,nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "backlog_id", updatable = false, nullable = false)
     @JsonIgnore
     private Backlog backlog;
 
@@ -127,12 +127,12 @@ public class ProjectTask {
     }
 
     @PrePersist
-    protected void onCreate(){
-        this.created_At =new Date();
+    protected void onCreate() {
+        this.created_At = new Date();
     }
 
     @PreUpdate
-    protected void onUpdate(){
+    protected void onUpdate() {
         this.updated_At = new Date();
     }
 
