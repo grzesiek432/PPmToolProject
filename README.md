@@ -1,2 +1,2 @@
-# PPmToolProject
-In this project I create a personal management app
+# PPMToolProject
+In this project I create a personal management app using Kanban's Methodology.
