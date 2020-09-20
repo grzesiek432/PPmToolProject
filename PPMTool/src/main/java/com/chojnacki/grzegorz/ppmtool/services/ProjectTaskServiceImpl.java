@@ -10,6 +10,8 @@ import com.chojnacki.grzegorz.ppmtool.repositories.ProjectTaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 public class ProjectTaskServiceImpl implements ProjectTaskService {
@@ -94,10 +96,27 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
         //make sure that backlog/project id in the path corresponds to the right project
         if(!projectTask.getProjectIdentifier().equals(backlog_id))
         {
-            throw new ProjectNotFoundException("Project Task '" + sequence + "'does not exist in project: '"+backlog_id);
+            throw new ProjectNotFoundException("Project Task '" + sequence + "' does not exist in project: '"+backlog_id);
         }
 
 
         return projectTask;
+    }
+
+    @Override
+    public ProjectTask updateByProjectSequence(ProjectTask updatedTask, String backlog_id,String pt_id) {
+        ProjectTask projectTask = findPTByProjectSequence(backlog_id,pt_id);
+
+        projectTask = updatedTask;
+        return projectTaskRepository.save(projectTask);
+
+    }
+
+    @Override
+    public void deletePTByProjectSequence(String backlog_id, String pt_id) {
+        ProjectTask projectTask = findPTByProjectSequence(backlog_id,pt_id);
+
+        projectTaskRepository.delete(projectTask);
+
     }
 }
