@@ -45,12 +45,12 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
             projectTask.setProjectIdentifier(projectIdentifier);
 
             //INITIAL priority when priority null
-            if (projectTask.getPriority() == null) // In the future need projectTask.getPriority()== 0 to handle the form
+            if (projectTask.getPriority() == 0 || projectTask.getPriority() == null) // In the future need projectTask.getPriority()== 0 to handle the form
             {
                 projectTask.setPriority(3); // low priority
             }
 
-            //INITIAL status when status is null
+            //INITIAL status when status is null or 0
             if (projectTask.getStatus() == "" || projectTask.getStatus() == null) {
                 projectTask.setStatus("TO-DO");
             }
