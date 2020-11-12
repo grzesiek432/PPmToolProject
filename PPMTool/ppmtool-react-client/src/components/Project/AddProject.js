@@ -55,15 +55,16 @@ class AddProject extends Component {
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">
-              <h5 className="display-4 text-center">
+              <h5 className="display-4 text-center font-weight-bold">
                 Create Project Form
               </h5>
               <hr />
               <form onSubmit={this.onSubmit}>
                 <div className="form-group">
-                  <input
+                <label className="font-weight-bold align-text-bottom">Project Name</label> 
+                <input
                     type="text"
-                    className={classnames("form-control form-control-lg", {
+                    className={classnames("form-control form-control-lg bg-light", {
                       "is-invalid": errors.projectName,
                     })}
                     placeholder="Project Name"
@@ -76,9 +77,10 @@ class AddProject extends Component {
                   )}
                 </div>
                 <div className="form-group">
-                  <input
+                <label className="font-weight-bold align-text-bottom">Project Identifier</label>  
+                <input
                     type="text"
-                    className={classnames("form-control form-control-lg", {
+                    className={classnames("form-control form-control-lg bg-light", {
                       "is-invalid": errors.projectIdentifier,
                     })}
                     placeholder="Unique Project ID"
@@ -93,9 +95,10 @@ class AddProject extends Component {
                   )}
                 </div>
                 <div className="form-group">
-                  <input
+                <label className="font-weight-bold align-text-bottom">Project Description</label>  
+                <input
                     type="text"
-                    className={classnames("form-control form-control-lg", {
+                    className={classnames("form-control form-control-lg bg-light", {
                       "is-invalid": errors.description,
                     })}
                     placeholder="Project description"
@@ -107,21 +110,23 @@ class AddProject extends Component {
                     <div class="invalid-feedback">{errors.description}</div>
                   )}
                 </div>
-                <h6>Start Date</h6>
+                
                 <div className="form-group">
+                <label className="font-weight-bold align-text-bottom">Start Date</label>
                   <input
                     type="date"
-                    className="form-control form-control-lg"
+                    className="form-control form-control-lg bg-light"
                     name="startDate"
                     value={this.state.startDate}
                     onChange={this.onChange}
                   />
                 </div>
-                <h6>Estimated End Date</h6>
+                
                 <div className="form-group">
+                <label className="font-weight-bold align-text-bottom">Estimated End Date</label>
                   <input
                     type="date"
-                    className="form-control form-control-lg"
+                    className="form-control form-control-lg bg-light"
                     name="endDate"
                     value={this.state.endDate}
                     onChange={this.onChange}

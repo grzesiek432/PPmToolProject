@@ -12,6 +12,8 @@ import ProjectBoard from "./components/ProjectBoard/ProjectBoard";
 import AddProjectTask from "./components/ProjectBoard/ProjectTasks/AddProjectTask";
 
 function App() {
+
+  document.body.style = 'background-color: lemonchiffon';
   return (
     <Provider store={store} className="provider">
       <Router>

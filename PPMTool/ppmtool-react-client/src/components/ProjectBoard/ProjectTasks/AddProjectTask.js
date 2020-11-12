@@ -66,13 +66,14 @@ class AddProjectTask extends Component {
               <Link to={`/projectBoard/${id}`} className="btn btn-dark">
                 Back to Project Board
               </Link>
-              <h4 className="display-4 text-center">Add Project Task</h4>
+              <h4 className="display-4 text-center font-weight-bold">Add Project Task</h4>
               <p className="lead text-center">Project Name + Project Code</p>
               <form onSubmit={this.onSubmit}>
                 <div className="form-group">
+                <label className="font-weight-bold align-text-bottom" name="Project Summary">Project Summary</label>
                   <input
                     type="text"
-                    className={classnames("form-control form-control-lg", {
+                    className={classnames("form-control form-control-lg bg-light", {
                       "is-invalid": errors.summary,
                     })}
                     name="summary"
@@ -86,6 +87,7 @@ class AddProjectTask extends Component {
                   )}
                 </div>
                 <div className="form-group">
+                <label className="font-weight-bold" name="Project Summary">Acceptance Criteria</label>
                   <textarea
                     className="form-control form-control-lg"
                     placeholder="Acceptance Criteria"
@@ -94,8 +96,9 @@ class AddProjectTask extends Component {
                     onChange={this.onChange}
                   ></textarea>
                 </div>
-                <h6>Due Date</h6>
+                
                 <div className="form-group">
+                <label className="font-weight-bold align-text-bottom">Due Date</label>
                   <input
                     type="date"
                     className="form-control form-control-lg"
@@ -105,6 +108,7 @@ class AddProjectTask extends Component {
                   />
                 </div>
                 <div className="form-group">
+                <label className="font-weight-bold align-text-bottom">Priority</label>
                   <select
                     className="form-control form-control-lg"
                     name="priority"
@@ -119,6 +123,7 @@ class AddProjectTask extends Component {
                 </div>
 
                 <div className="form-group">
+                <label className="font-weight-bold align-text-bottom">Status</label>
                   <select
                     className="form-control form-control-lg"
                     name="status"

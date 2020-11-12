@@ -7,15 +7,12 @@ import PropTypes from "prop-types";
 import projectReducer from "../reducers/projectReducer";
 
 class Dashboard extends Component {
-
-
-  componentDidMount(e)
-  {
+  componentDidMount(e) {
     this.props.getProjects();
   }
   render() {
-    const {projects} = this.props.project;
-   
+    const { projects } = this.props.project;
+
     return (
       <div className="projects">
         <div className="container">
@@ -27,14 +24,9 @@ class Dashboard extends Component {
               <br />
               <hr />
 
-              {
-                projects.map(project => (
-                  <ProjectItem key={projects.id} project = {project}/>
-                ))
-                
-              }
-
-              
+              {projects.map((project) => (
+                <ProjectItem key={projects.id} project={project} />
+              ))}
             </div>
           </div>
         </div>
@@ -45,12 +37,11 @@ class Dashboard extends Component {
 
 Dashboard.propTypes = {
   project: PropTypes.object.isRequired,
-  getProjects: PropTypes.func.isRequired
-}
+  getProjects: PropTypes.func.isRequired,
+};
 
-const mapStateToProps = state => ({
-  project:state.project,
+const mapStateToProps = (state) => ({
+  project: state.project,
+});
 
-})
-
-export default connect(mapStateToProps,{getProjects}) (Dashboard);
+export default connect(mapStateToProps, { getProjects })(Dashboard);
