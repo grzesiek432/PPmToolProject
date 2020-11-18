@@ -1,8 +1,10 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
+import { Link } from "react-router-dom";
 
 class ProjectTask extends Component {
   render() {
     const { project_task } = this.props;
+   
     let priorityString;
     let priorityClass;
 
@@ -18,22 +20,25 @@ class ProjectTask extends Component {
       priorityClass = "bg-info text-light";
       priorityString = "LOW";
     }
+
+    
+
     return (
-      <div class="card mb-1 bg-light">
-        <div class={`card-header text-primary ${priorityClass}`}>
+      <div className="card mb-1 bg-light">
+        <div className={`card-header text-primary ${priorityClass}`}>
           ID: {project_task.projectSequence} -- Priority: {priorityString}
-          
         </div>
-        <div class="card-body bg-light">
-          <h5 class="card-title">{project_task.summary}</h5>
-          <p class="card-text text-truncate ">
+        <div className="card-body bg-light">
+          <h5 className="card-title">{project_task.summary}</h5>
+          <p className="card-text text-truncate ">
             {project_task.acceptanceCriteria}
           </p>
-          <a href="" class="btn btn-primary">
-            View / Update
-          </a>
+        
+          <Link to={`/projectTaskView/${project_task.projectIdentifier}/${project_task.projectSequence}`}>
+          <input className="btn btn-primary ml-2 mt-1  " value="View"/>
+          </Link>
 
-          <button class="btn btn-danger ml-4">Delete</button>
+          <input className="btn btn-danger ml-2" value="Delete"/>
         </div>
       </div>
     );
@@ -41,3 +46,5 @@ class ProjectTask extends Component {
 }
 
 export default ProjectTask;
+
+

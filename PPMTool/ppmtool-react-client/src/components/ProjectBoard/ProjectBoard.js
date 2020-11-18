@@ -86,6 +86,8 @@ class ProjectBoard extends Component {
         <h1 className="font-weight-bold col-md-12 display-4 text-center">
           Project Board
         </h1>
+
+      <p className="lead text-center">Project Name: {" "} {id}</p>
        
 
         <br />
