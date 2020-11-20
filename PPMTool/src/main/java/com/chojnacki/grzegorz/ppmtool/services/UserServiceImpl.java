@@ -4,7 +4,6 @@ package com.chojnacki.grzegorz.ppmtool.services;
 import com.chojnacki.grzegorz.ppmtool.domain.User;
 import com.chojnacki.grzegorz.ppmtool.exceptions.UsernameAlreadyExistsException;
 import com.chojnacki.grzegorz.ppmtool.repositories.UserRepository;
-import com.chojnacki.grzegorz.ppmtool.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
