@@ -2,6 +2,7 @@ package com.chojnacki.grzegorz.ppmtool.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -23,6 +24,7 @@ public class User implements UserDetails {
     private Long id;
     @Email(message = "Username needs to be an email")
     @NotBlank(message = "Username is required")
+    @Length(max = 56)
     private String username;
     @NotBlank(message = "Please enter your first name")
     private String firstName;
