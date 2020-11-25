@@ -25,35 +25,45 @@ public class ProjectServiceImpl implements ProjectService {
     private UserRepository userRepository;
 
 
-
-
     @Override
-    public Project saveOrUpdate(Project project,String username) {
-       try {
-           User user = userRepository.findByUsername(username);
+    public Project saveOrUpdate(Project project, String username) {
 
-           project.setUser(user);
-           project.setProjectLeader(user.getUsername());
-           project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
+        //project.getId != null
+        //find by db id -> null
 
-           if(project.getId()==null)
-           {
-               Backlog backlog = new Backlog();
-               project.setBacklog(backlog);
-               backlog.setProject(project);
-               backlog.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
-           }
+        if (project.getId() != null) {
+            Project existingProject = projectRepository.findByProjectIdentifier(project.getProjectIdentifier());
+            if (existingProject != null && (!existingProject.getProjectLeader().equals(username))) {
+                throw new ProjectNotFoundException("Project not found in your account");
+            }else if(existingProject == null){
+                throw new ProjectNotFoundException("Project with ID: '" + project.getProjectIdentifier() +"' cannot be updated because it doesn't exist");
+            }
+        }
 
-           if(project.getId() != null)
-           {
-               project.setBacklog(backlogRepository.findByProjectIdentifier(project.getProjectIdentifier().toUpperCase()));
-           }
 
-           return projectRepository.save(project);
+        try {
+            User user = userRepository.findByUsername(username);
 
-       } catch (Exception e) {
-           throw new ProjectIdException("Project ID '"+project.getProjectIdentifier().toUpperCase()+"' already exists" );
-       }
+            project.setUser(user);
+            project.setProjectLeader(user.getUsername());
+            project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
+
+            if (project.getId() == null) {
+                Backlog backlog = new Backlog();
+                project.setBacklog(backlog);
+                backlog.setProject(project);
+                backlog.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
+            }
+
+            if (project.getId() != null) {
+                project.setBacklog(backlogRepository.findByProjectIdentifier(project.getProjectIdentifier().toUpperCase()));
+            }
+
+            return projectRepository.save(project);
+
+        } catch (Exception e) {
+            throw new ProjectIdException("Project ID '" + project.getProjectIdentifier().toUpperCase() + "' already exists");
+        }
 
     }
 
@@ -61,32 +71,27 @@ public class ProjectServiceImpl implements ProjectService {
     public Project findProjectByIdentifier(String projectId, String username) {
 
         Project project = projectRepository.findByProjectIdentifier(projectId.toUpperCase());
-        if(project==null)
-        {
-            throw new ProjectIdException("Project ID '"+projectId+"' doesn't exist!!!");
+        if (project == null) {
+            throw new ProjectIdException("Project ID '" + projectId + "' doesn't exist!!!");
         }
 
-        if(!project.getProjectLeader().equals(username))
-        {
+        if (!project.getProjectLeader().equals(username)) {
             throw new ProjectNotFoundException("Project not found in your account");
         }
 
 
-
         return project;
-     }
+    }
 
-     @Override
-    public Iterable<Project> findAllProjects(String username)
-     {
-         return projectRepository.findAllByProjectLeader(username);
-     }
+    @Override
+    public Iterable<Project> findAllProjects(String username) {
+        return projectRepository.findAllByProjectLeader(username);
+    }
 
-     @Override
-    public void deleteProjectByIdentifier(String projectId,String username)
-     {
+    @Override
+    public void deleteProjectByIdentifier(String projectId, String username) {
 
-         projectRepository.delete(findProjectByIdentifier(projectId,username));
-     }
+        projectRepository.delete(findProjectByIdentifier(projectId, username));
+    }
 
 }
