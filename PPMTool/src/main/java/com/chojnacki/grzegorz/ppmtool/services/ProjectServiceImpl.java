@@ -3,9 +3,12 @@ package com.chojnacki.grzegorz.ppmtool.services;
 
 import com.chojnacki.grzegorz.ppmtool.domain.Backlog;
 import com.chojnacki.grzegorz.ppmtool.domain.Project;
+import com.chojnacki.grzegorz.ppmtool.domain.User;
 import com.chojnacki.grzegorz.ppmtool.exceptions.ProjectIdException;
+import com.chojnacki.grzegorz.ppmtool.exceptions.ProjectNotFoundException;
 import com.chojnacki.grzegorz.ppmtool.repositories.BacklogRepository;
 import com.chojnacki.grzegorz.ppmtool.repositories.ProjectRepository;
+import com.chojnacki.grzegorz.ppmtool.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +21,19 @@ public class ProjectServiceImpl implements ProjectService {
     @Autowired
     private BacklogRepository backlogRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
 
 
 
     @Override
-    public Project saveOrUpdate(Project project) {
+    public Project saveOrUpdate(Project project,String username) {
        try {
+           User user = userRepository.findByUsername(username);
+
+           project.setUser(user);
+           project.setProjectLeader(user.getUsername());
            project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
 
            if(project.getId()==null)
@@ -48,7 +58,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Project findProjectByIdentifier(String projectId) {
+    public Project findProjectByIdentifier(String projectId, String username) {
 
         Project project = projectRepository.findByProjectIdentifier(projectId.toUpperCase());
         if(project==null)
@@ -56,26 +66,27 @@ public class ProjectServiceImpl implements ProjectService {
             throw new ProjectIdException("Project ID '"+projectId+"' doesn't exist!!!");
         }
 
+        if(!project.getProjectLeader().equals(username))
+        {
+            throw new ProjectNotFoundException("Project not found in your account");
+        }
+
+
+
         return project;
      }
 
      @Override
-    public Iterable<Project> findAllProjects()
+    public Iterable<Project> findAllProjects(String username)
      {
-         return projectRepository.findAll();
+         return projectRepository.findAllByProjectLeader(username);
      }
 
      @Override
-    public void deleteProjectByIdentifier(String projectId)
+    public void deleteProjectByIdentifier(String projectId,String username)
      {
 
-         Project project = projectRepository.findByProjectIdentifier(projectId.toUpperCase());
-         if(project == null)
-         {
-             throw new ProjectIdException("Cannot Project with '"+projectId+"'. This project does not exist.");
-         }
-
-         projectRepository.delete(project);
+         projectRepository.delete(findProjectByIdentifier(projectId,username));
      }
 
 }
