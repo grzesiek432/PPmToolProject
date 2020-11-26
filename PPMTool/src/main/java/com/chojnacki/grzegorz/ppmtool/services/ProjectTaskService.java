@@ -4,9 +4,9 @@ import com.chojnacki.grzegorz.ppmtool.domain.ProjectTask;
 
 public interface ProjectTaskService {
 
-    ProjectTask addProjectTask(String projectIdentifier, ProjectTask projectTask);
-    Iterable<ProjectTask> findBacklogById(String id);
-    ProjectTask findPTByProjectSequence(String backlog_id, String sequence);
-    ProjectTask updateByProjectSequence(ProjectTask updatedTask,String backlog_id,String pt_id);
-    void deletePTByProjectSequence(String backlog_id,String pt_id);
+    ProjectTask addProjectTask(String projectIdentifier, ProjectTask projectTask,String username);
+    Iterable<ProjectTask> findBacklogById(String id,String username);
+    ProjectTask findPTByProjectSequence(String backlog_id, String sequence,String username);
+    ProjectTask updateByProjectSequence(ProjectTask updatedTask,String backlog_id,String pt_id,String username);
+    void deletePTByProjectSequence(String backlog_id,String pt_id,String username);
 }
