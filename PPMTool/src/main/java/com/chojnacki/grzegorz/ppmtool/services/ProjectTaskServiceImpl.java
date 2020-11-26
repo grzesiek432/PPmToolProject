@@ -1,7 +1,6 @@
 package com.chojnacki.grzegorz.ppmtool.services;
 
 import com.chojnacki.grzegorz.ppmtool.domain.Backlog;
-import com.chojnacki.grzegorz.ppmtool.domain.Project;
 import com.chojnacki.grzegorz.ppmtool.domain.ProjectTask;
 import com.chojnacki.grzegorz.ppmtool.exceptions.ProjectNotFoundException;
 import com.chojnacki.grzegorz.ppmtool.repositories.BacklogRepository;
@@ -23,13 +22,18 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
     @Autowired
     private ProjectRepository projectRepository;
 
+    @Autowired
+    private ProjectService projectService;
+
+
+
 
     @Override
-    public ProjectTask addProjectTask(String projectIdentifier, ProjectTask projectTask) {
+    public ProjectTask addProjectTask(String projectIdentifier, ProjectTask projectTask,String username) {
 
         try {
             //PTs to be added to a specific project, project != null Backlog exists
-            Backlog backlog = backlogRepository.findByProjectIdentifier(projectIdentifier);
+            Backlog backlog = projectService.findProjectByIdentifier(projectIdentifier,username).getBacklog();//backlogRepository.findByProjectIdentifier(projectIdentifier);
             //set the backlog to the projectTask
             projectTask.setBacklog(backlog);
             // project sequence to be like this: IDPRO-1,IDPRO-2
@@ -43,12 +47,12 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
             projectTask.setProjectIdentifier(projectIdentifier);
 
             //INITIAL priority when priority null
-            if (projectTask.getPriority() == null) // In the future need projectTask.getPriority()== 0 to handle the form
+            if (projectTask.getPriority() == null || projectTask.getPriority() == 0) // In the future need projectTask.getPriority()== 0 to handle the form
             {
                 projectTask.setPriority(3); // low priority
             }
 
-            //INITIAL status when status is null
+            //INITIAL status when status is null or 0
             if (projectTask.getStatus() == "" || projectTask.getStatus() == null) {
                 projectTask.setStatus("TO-DO");
             }
@@ -61,27 +65,18 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
     }
 
     @Override
-    public Iterable<ProjectTask> findBacklogById(String id) {
+    public Iterable<ProjectTask> findBacklogById(String id,String username) {
 
-        Project project = projectRepository.findByProjectIdentifier(id);
-
-        if(project == null)
-        {
-            throw new ProjectNotFoundException("Project with ID:" + id + " doesn't exist");
-        }
-
+        projectService.findProjectByIdentifier(id,username);
         return projectTaskRepository.findByProjectIdentifierOrderByPriority(id);
     }
 
     @Override
-    public ProjectTask findPTByProjectSequence(String backlog_id, String sequence)
+    public ProjectTask findPTByProjectSequence(String backlog_id, String sequence,String username)
     {
         //make sure that we are searching on the right backlog
-        Backlog backlog = backlogRepository.findByProjectIdentifier(backlog_id);
-        if(backlog == null)
-        {
-            throw new ProjectNotFoundException("Project with ID:" + backlog_id + " does not exist");
-        }
+        projectService.findProjectByIdentifier(backlog_id,username);
+
 
         //make sure that task exists
         ProjectTask projectTask = projectTaskRepository.findByProjectSequence(sequence);
@@ -94,10 +89,27 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
         //make sure that backlog/project id in the path corresponds to the right project
         if(!projectTask.getProjectIdentifier().equals(backlog_id))
         {
-            throw new ProjectNotFoundException("Project Task '" + sequence + "'does not exist in project: '"+backlog_id);
+            throw new ProjectNotFoundException("Project Task '" + sequence + "' does not exist in project: '"+backlog_id);
         }
 
 
         return projectTask;
+    }
+    @Override
+    public ProjectTask updateByProjectSequence(ProjectTask updatedTask, String backlog_id,String pt_id,String username) {
+        ProjectTask projectTask = findPTByProjectSequence(backlog_id,pt_id,username);
+
+        projectTask = updatedTask;
+        return projectTaskRepository.save(projectTask);
+
+
+    }
+
+    @Override
+    public void deletePTByProjectSequence(String backlog_id, String pt_id,String username) {
+        ProjectTask projectTask = findPTByProjectSequence(backlog_id,pt_id,username);
+
+        projectTaskRepository.delete(projectTask);
+
     }
 }

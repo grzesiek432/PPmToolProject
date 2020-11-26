@@ -2,7 +2,9 @@ package com.chojnacki.grzegorz.ppmtool.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -23,6 +25,7 @@ public class Project {
     @NotBlank(message = "Project Identifier is required")
     @Size(min =4,max =5,message = "Please use 4 to 5 characters")
     @Column(updatable = false , unique = true)
+    @Length(max = 56)
     private String projectIdentifier;
     @NotBlank(message = "Project description is required")
     private String description;
@@ -40,7 +43,29 @@ public class Project {
     @OneToOne(fetch = FetchType.EAGER,cascade=CascadeType.ALL,mappedBy = "project")
     private Backlog backlog;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    private User user;
+
+    private String projectLeader;
+
     public Project() {
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getProjectLeader() {
+        return projectLeader;
+    }
+
+    public void setProjectLeader(String projectLeader) {
+        this.projectLeader = projectLeader;
     }
 
     public Long getId() {

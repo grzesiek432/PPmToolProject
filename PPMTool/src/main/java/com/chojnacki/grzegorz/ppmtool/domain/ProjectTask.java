@@ -2,6 +2,7 @@ package com.chojnacki.grzegorz.ppmtool.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -14,6 +15,7 @@ public class ProjectTask {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(updatable = false, unique = true)
+    @Length(max = 56)
     private String projectSequence;
     @NotBlank(message = "Please include a project summary")
     private String summary;
@@ -30,7 +32,7 @@ public class ProjectTask {
     private String projectIdentifier;
 
     //ManyToOne with Backlog
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "backlog_id", updatable = false, nullable = false)
     @JsonIgnore
     private Backlog backlog;
